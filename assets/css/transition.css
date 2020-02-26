@@ -1,0 +1,133 @@
+/*切换页面效果*/
+.page-enter-active,.page-leave-active{
+  transition: opacity 200ms;
+}
+
+.page-enter,.page-leave-to{
+  opacity: 0;
+}
+
+
+/*单独一个页面的切换效果*/
+.single-enter-active,.single-leave-active{
+  transition: transform 200ms;
+}
+
+.single-enter{
+  transform: translateX(100%);
+}
+
+.single-enter-to{
+  transform: translateX(0);
+}
+
+.single-leave,.single-leave-to{
+  opacity: 0;
+}
+
+
+.fade-200-enter-active,
+.fade-200-leave-active {
+  transition: opacity 200ms;
+}
+
+.fade-200-enter,
+.fade-200-leave-to {
+  opacity: 0;
+}
+
+.fade-400-enter-active,
+.fade-400-leave-active {
+  transition: opacity 400ms;
+}
+
+.fade-400-enter,
+.fade-400-leave-to {
+  opacity: 0;
+}
+
+
+
+/*重写一些 animate.css*/
+@-webkit-keyframes bounceInDown {
+
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -500px, 0);
+    transform: translate3d(0, -500px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes smaller-bounceInDown {
+
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -500px, 0);
+    transform: translate3d(0, -500px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.smaller-bounceInDown {
+  -webkit-animation-name: smaller-bounceInDown;
+  animation-name: smaller-bounceInDown;
+}
