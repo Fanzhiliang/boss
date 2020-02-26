@@ -1,32 +1,32 @@
 <template>
-	<div class="index">
-		<!-- 快速登录 -->
+  <div class="city-site">
+    <!-- 快速登录 -->
 		<fast-login-register v-if="!isLogin" />
-		<!-- 搜索职位 -->
+    <!-- 搜索职位 -->
 		<job-search :hotList="hotList" :jobTypeList="jobTypeList"/>
-		<div class="temp-div">
-			index
+    <div class="temp-div">
+			city-site
 		</div>
-	</div>
+  </div>
 </template>
 
 <script>
-	import FastLoginRegister from '~/components/fast-login-register'
-	import JobSearch from '~/components/job-search'
+  import FastLoginRegister from '~/components/fast-login-register'
+  import JobSearch from '~/components/job-search'
   import { mapGetters } from 'vuex'
   import {getHotSearch,getJobType} from '~/assets/api/job'
-	export default{
-		name: 'Index',
-		components: {FastLoginRegister,JobSearch},
-		data(){
+  export default {
+    name: 'CitySite',
+    components: {FastLoginRegister,JobSearch},
+    data(){
 			return{
         hotList: [],
-        jobTypeList: [],
+        jobTypeList: []
 			}
     },
     async asyncData({req}){
       //获取热门搜索、获取职位类型
-      let [hotList,jobTypeList] = await Promise.all([
+      let [hotList,jobTypeList,title] = await Promise.all([
         getHotSearch({},req),
         getJobType({},req)
       ])
@@ -35,20 +35,18 @@
         jobTypeList
       }
     },
-		computed: {
+    computed: {
 			...mapGetters(['isLogin'])
 		},
-		methods: {
-
-		},
-		mounted() {
-
-		},
-	}
+    created(){
+      console.log(this.$route.params.city)
+      // window.document.title = `[${this.$route.params.city}招聘信息]`
+    }
+  }
 </script>
 
 <style lang="scss">
-	.index{
+  .city-site{
 
   }
   .temp-div{

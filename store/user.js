@@ -54,11 +54,9 @@ export const actions = {
       }).catch(reject)
     })
   },
-  getUserInfo: ({commit,state,dispatch}) => {
+  getUserInfo: ({commit,state,dispatch},req) => {
     return new Promise((resolve, reject) => {
-      getUserInfo({
-        token: state.token
-      }).then((userInfo) => {
+      getUserInfo({},req).then((userInfo) => {
         commit('setUserInfo', userInfo);
         resolve(userInfo);
       }).catch((err) => {

@@ -10,14 +10,21 @@
   export default {
     name: 'SelectList',
     props: {
-      type: Array,
-      default: () => ([])
+      list: {
+        type: Array,
+        default: () => ([])
+      }
+    },
+    data(){
+      return {
+
+      }
     },
     methods: {
 
     },
     mounted(){
-      
+      console.log(this.list)
     }
   }
 </script>

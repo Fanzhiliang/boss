@@ -4,7 +4,7 @@
 
 			<div class="logo">
 				<a href="" class="link" @click.prevent="goRouter('/')">
-					<img src="/static/img/logo-2x.png" alt="">
+					<img src="~/static/img/logo-2x.png" alt="">
 				</a>
 			</div>
 
@@ -55,7 +55,7 @@
 						<!-- 切换身份提示 -->
 						<transition name="fade-400">
 							<div class="toggle-tip" v-show="isShowToggleTip">
-								<img src="/static/img/recruit-tip.gif" alt="">
+								<img src="~/static/img/recruit-tip.gif" alt="">
 								<p>在 APP 端“我的 - 设置”中切换为Boss身份后，刷新本页面即可进行招聘</p>
 								<div class="triangle"></div>
 							</div>
@@ -84,8 +84,8 @@
 			<!-- 未登录 -->
 			<template v-else>
 				<div class="auth">
-					<router-link class="auth-button" to="/register">注册</router-link>
-					<router-link class="auth-button" to="/login">登录</router-link>
+					<nuxt-link class="auth-button" to="/register">注册</nuxt-link>
+					<nuxt-link class="auth-button" to="/login">登录</nuxt-link>
 				</div>
 				<ul class="link-list fr">
 					<li class="link-item" v-for="(item,index) in rightLinkList" :key="index">
@@ -120,7 +120,7 @@
 				leftLinkList: [
 					{label: '首页',path: '/'},
 					{label: '广州站',path: ()=>{
-						return `/citySite/${selectCity.city}`;
+						return `/city-site/${selectCity.city}`;
 					}},
 					{label: '职位',path: ''},
 					{label: '公司',path: ''},
@@ -189,7 +189,8 @@
 				if(this.$route.path === path){
 					window.location.reload();
 				}else if(typeof path === 'string'){
-					this.$router.push({path});
+          this.$router.push({path});
+          // window.location.href = path;
 				}else if(typeof path === 'function'){
 					this.goRouter(path());
 				}
@@ -258,7 +259,7 @@
 			.location-icon{
 				width: 15px;
 				height: 20px;
-				background: url(/static/img/icon-poi.png) 0 -163px;
+				background: url(~static/img/icon-poi.png) 0 -163px;
 				margin: 15px 0;
 			}
 			.current-location{
@@ -398,7 +399,8 @@
 				transform: translate(0,100%);
 				width: 235px;
 				background-color: #F2F5FA;
-				box-shadow: 0 0 15px rgba(136,136,136, 0.2);
+        box-shadow: 0 0 15px rgba(136,136,136, 0.2);
+        z-index: 99;
 				.dropdown-item{
 					background-color: #ffffff;
 					&:hover{

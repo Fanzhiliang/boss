@@ -1,6 +1,6 @@
 /*切换页面效果*/
 .page-enter-active,.page-leave-active{
-  transition: opacity 200ms;
+  transition: opacity 500ms;
 }
 
 .page-enter,.page-leave-to{
@@ -9,7 +9,7 @@
 
 
 /*单独一个页面的切换效果*/
-.single-enter-active,.single-leave-active{
+/* .single-enter-active,.single-leave-active{
   transition: transform 200ms;
 }
 
@@ -23,7 +23,7 @@
 
 .single-leave,.single-leave-to{
   opacity: 0;
-}
+} */
 
 
 .fade-200-enter-active,

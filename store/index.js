@@ -15,10 +15,12 @@ export const mutations = {
 
 export const actions = {
   nuxtServerInit({commit,dispatch},{req}){
-    // let cookieObj = cookie.parse(req.headers.cookie);
-    // let token = cookieObj[TokenKey] || '';
-    // commit('setToken', token);
-    // return dispatch('getUserInfo', req);
+    let cookieObj = cookie.parse(req.headers.cookie);
+    let token = cookieObj[TokenKey] || '';
+    if (token){
+      commit('setToken', token);
+      return dispatch('getUserInfo', req);
+    }
   }
 }
 

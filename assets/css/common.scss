@@ -7,20 +7,22 @@ $text-gray: #9fa3b0;//文字灰色
 
 $main-width: 1184px;//主体宽度
 
+body {
+  min-width: 1184px;
+}
+
 ::selection{
 	color: #ffffff;
 	background: $theme-color;
 }
 
-@mixin flex-content {
-	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	a {
-		color: #00b4ff;
-	}
+@mixin temp-div {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 @mixin my-button(
 	$width: auto,
