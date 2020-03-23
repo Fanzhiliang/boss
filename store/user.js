@@ -10,7 +10,7 @@ export const getters = {
   token: state => state.token,
   userInfo: state => state.userInfo,
   isLogin: state => { //是否已经登录
-    return state.token && state.userInfo
+    return state.token && state.userInfo && state.userInfo.userId;
   }
 }
 
@@ -50,6 +50,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       logout().then((res) => {
         commit('setToken', '');
+        process.client && window.location.reload();//如果是客户端刷新页面
         resolve(res);
       }).catch(reject)
     })

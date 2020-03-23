@@ -71,8 +71,11 @@ input {
 	outline: none;
 }
 
-a{
+a,
+a :hover {
 	text-decoration: none;
-	color: #414a60;
+  color: #414a60;
+  outline: none;
 }
+
 

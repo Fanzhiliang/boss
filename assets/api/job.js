@@ -15,3 +15,11 @@ export const getJobType = (params,req) => request({
   req,
   params
 })
+
+//获取我的搜索历史
+export const getSearchHistory = (params, req) => request({
+  url: '/jobs/getSearchHistory',
+  method: 'get',
+  req,
+  params
+})

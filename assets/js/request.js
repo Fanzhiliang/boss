@@ -1,7 +1,18 @@
+/*
+ * code:200 无错误
+ * code:1 普通错误，会弹出消息提示
+ * code:2 登录有关错误，前端会弹框确定后跳转到登录页面
+ * code:3 普通错误，但不弹出消息提示
+ */
+
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
-import {getToken,TokenKey} from '~/assets/js/auth'
-import cookie from 'cookie-parse'
+import {
+  MessageBox,
+  Message
+} from 'element-ui'
+import {
+  getToken
+} from '~/assets/js/auth'
 
 const service = ({
   url = '',
@@ -9,25 +20,16 @@ const service = ({
   data = {},
   params = {},
   headers = {},
-  req = {}
+  req = false
 }) => {
-  return new Promise(function(resolve,reject){
+  return new Promise(function (resolve, reject) {
     axios({
       url: process.env.BASE_URL + url,
       method,
       data,
       params,
       headers: Object.assign(headers, {
-        'Authorization': (function () {
-          if (process.client){
-            return getToken() || '';
-          } else if (process.server && req) {
-            let cookieObj = cookie.parse(req.headers.cookie);
-            return cookieObj[TokenKey] || '';
-          } else {
-            return '';
-          }
-        })()
+        'Authorization': getToken(process.server ? req : null)
       })
     }).then(response => {
       const res = response.data

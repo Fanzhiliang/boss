@@ -1,5 +1,4 @@
-import {TokenKey} from '~/assets/js/auth'
-import cookie from 'cookie-parse'
+import {getToken} from '~/assets/js/auth'
 
 export const state = () => ({
 
@@ -15,12 +14,15 @@ export const mutations = {
 
 export const actions = {
   nuxtServerInit({commit,dispatch},{req}){
-    let cookieObj = cookie.parse(req.headers.cookie);
-    let token = cookieObj[TokenKey] || '';
-    if (token){
-      commit('setToken', token);
-      return dispatch('getUserInfo', req);
-    }
+    return new Promise((resolve) => {
+      let token = getToken(req);
+      if (token) {
+        commit('setToken', token);
+        dispatch('getUserInfo', req).then(resolve).catch(resolve);
+      } else {
+        resolve();
+      }
+    })
   }
 }
 

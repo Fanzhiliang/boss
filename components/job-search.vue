@@ -7,21 +7,25 @@
           <a href="/" class="logo"></a>
           <div class="serach">
             <div class="left-row" :class="{'focus': isFocus}" @mouseenter="focusKeyword" @mouseleave="blurKeyword">
-              <div class="select">
-                <div class="job-type">职业类型</div>
+              <div class="select" @click.stop="showSelectList">
+                <div class="job-type">{{jobTypeLabel}}</div>
                 <span class="triangle"></span>
-                <div class="select-wrap" @mouseenter="blurKeyword">
-                  <select-list :list="jobTypeList"/>
-                </div>
+                <select-list @mouseenter.native="blurKeyword" @select="selectJobType" :list="jobTypeList" :visible="isShowSelectList"/>
               </div>
-              <input type="text" class="keyword" placeholder="搜索职位、公司">
+              <div class="keyword-wrap">
+                <input type="text" class="keyword" placeholder="搜索职位、公司" v-model="keyword" @focus="showHistory" @blur="hideHistory">
+                <ul class="keyword-history" v-if="historyList.length > 0" v-show="isShowHistory">
+                  <li class="history-item" v-for="(item,index) in historyList" :key="index" @click="setKeyword(item)"><span>{{item}}</span></li>
+                </ul>
+              </div>
             </div>
             <button class="button">搜索</button>
           </div>
         </div>
 
         <div class="hot">
-          <span class="label">热门搜索</span><span class="hot-item" v-for="(item,index) in hotList" :key="index">{{item.label}}</span>
+          <span class="label">热门搜索</span>
+          <span class="hot-item" v-for="(item,index) in hotList" :key="index" @click="setKeyword(item.label)">{{item.label}}</span>
         </div>
 
       </div>
@@ -31,7 +35,9 @@
 
 <script>
   import {throttle} from '~/assets/js/utils.js'
-  import SelectList from '~/components/select-list.vue'
+  import SelectList from '~/components/select-list'
+  import { mapGetters } from 'vuex'
+  import {getJobType,getSearchHistory} from '~/assets/api/job'
   export default {
     name: 'JobSearch',
     components: {SelectList},
@@ -40,23 +46,46 @@
         type: Array,
         default: () => ([])
       },
-      jobTypeList: {
-        type: Array,
-        default: () => ([])
-      },
     },
     data(){
       return{
+        jobTypeList: [],
+        historyList: [],
         isFocus: false,
-        // hotList: [ ],
         animationDuration: 400,
         isBounce: false,
         isFixed: false,
         fixedTop: 0,//页面滚动超过这个距离 isFixed = true
-        // jobTypeList: [],
+        isShowSelectList: false,//是否显示选择职业组件
+        keyword: '',
+        jobType: null,
+        isShowHistory: false,//是否显示搜索历史
+      }
+    },
+    computed:{
+      ...mapGetters(['isLogin']),
+      jobTypeLabel(){
+        return this.jobType && this.jobType.label ? this.jobType.label : '职业类型';
+      }
+    },
+    watch:{
+      isLogin(newVal){//登录或者退出登录
+        this.refreshHistory();
       }
     },
     methods:{
+      //获取职业类型数组
+      getJobTypeList(){
+        getJobType().then(list => {
+          this.jobTypeList = list;
+        })
+      },
+      //刷新我的搜索历史
+      refreshHistory(){
+        getSearchHistory().then(list => {
+          this.historyList = list;
+        })
+      },
       focusKeyword(){
         this.isFocus = true;
       },
@@ -73,6 +102,41 @@
           this.isBounce = false;
         }
       },
+      //选择职业的显示和隐藏
+      showSelectList(){
+        this.isShowSelectList = true;
+        this.isShowHistory = false;
+      },
+      hideSelectList(){
+        this.isShowSelectList = false;
+      },
+      //搜索历史的显示和隐藏
+      showHistory(){
+        this.isShowHistory = true;
+        this.isShowSelectList = false;
+      },
+      hideHistory(){
+        setTimeout(() => {//弄个小延时为了触发点击搜索历史事件
+          this.isShowHistory = false;
+        },200)
+      },
+      //选择职业
+      selectJobType(job){
+        if(job && job.label && job.label !== '不限'){
+          this.jobType = job;
+        }else{
+          this.jobType = null;
+        }
+        this.hideSelectList();
+      },
+      //点击热门关键字
+      setKeyword(keyword){
+        this.keyword = keyword;
+      }
+    },
+    created(){
+      this.getJobTypeList();
+      this.refreshHistory();
     },
     mounted(){
       //获取滚动判断距离
@@ -80,9 +144,12 @@
       this.fixedTop = jobSearch.offsetHeight + jobSearch.offsetTop;
       this.scrollHandler();
       document.addEventListener('scroll',this.scrollHandler);
+      //点击外部隐藏职业选择
+      document.addEventListener('click',this.hideSelectList);
     },
     beforeDestroy(){
       document.removeEventListener('scroll',this.scrollHandler);
+      document.removeEventListener('click',this.hideSelectList);
     }
   }
 </script>
@@ -143,8 +210,7 @@
                 position: relative;
                 cursor: pointer;
                 .job-type{
-                  @include ellipsis;
-                  width: 80px;
+                  @include ellipsis(80px);
                   font-size: 16px;
                 }
                 .triangle{
@@ -156,20 +222,46 @@
                   border: 3px solid transparent;
                   border-top-color: #999999;
                 }
-                .select-wrap{
-                  position: absolute;
-                  left: 169px;
-                  bottom: -1px;
-                  width: 0;
-                  height: 0;
-                }
               }
-              .keyword{
-                @include placeholder-color;
-                width: 625px;
-                padding: 10px 20px;
-                border: 0;
-                font-size: 16px;
+              .keyword-wrap{
+                display: inline-block;
+                height: 100%;
+                position: relative;
+                .keyword{
+                  @include placeholder-color;
+                  width: 625px;
+                  padding: 10px 20px;
+                  border: 0;
+                  font-size: 16px;
+                }
+                .keyword-history{
+                  position: absolute;
+                  width: 100%;
+                  top: 100%;
+                  right: 0;
+                  transform: translate(-1px,1px);
+                  background-color: #ffffff;
+                  box-shadow: 0 2px 5px rgba(136,136,136,0.3);
+                  z-index: 99;
+                  .history-item{
+                    @include ellipsis(initial);
+                    height: 54px;
+                    line-height: 54px;
+                    padding: 0 30px;
+                    border-bottom: 1px solid #F2F5F9;
+                    span{
+                      color: #8D92A6;
+                      font-size: 13px;
+                    }
+                    &:hover{
+                      background-color: #F2F5F9;
+                      cursor: pointer;
+                      span{
+                        color: $theme-color;
+                      }
+                    }
+                  }
+                }
               }
             }
             .button{

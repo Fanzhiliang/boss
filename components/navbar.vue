@@ -142,7 +142,7 @@
 					},
 				],
 				dropdownList: [
-					{title: '个人中心',info: '推荐职位、编辑在线简历',path: ''},
+					{title: '个人中心',info: '推荐职位、编辑在线简历',path: '/user-center'},
 					{title: '账号设置',info: '修改密码、打招呼和常用语',path: ''},
 					{title: '隐私设置',info: '',path: ''},
 					{title: '求助助手',info: '',path: ''},
@@ -193,7 +193,10 @@
           // window.location.href = path;
 				}else if(typeof path === 'function'){
 					this.goRouter(path());
-				}
+        }
+        //把下拉框等隐藏
+        this.isShowToggleTip = false;
+        this.isShowDropdown = false;
 			},
 			//切换显示 用户下拉菜单
 			showDropdown(){
